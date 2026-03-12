@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:wseela_assessment/features/bnpl/helpers/payments_sched.dart';
+import 'package:wseela_assessment/features/bnpl/helpers/snack_bar_helper.dart';
 
 import '../models/installment_plan.dart';
 import '../models/installment_schedule_item.dart';
@@ -66,19 +67,6 @@ class BnplNotifier extends Notifier<BnplState> {
 
   BnplRepository get _repo => ref.read(bnplRepositoryProvider);
   GetPlansUseCase get _getPlans => GetPlansUseCase(_repo);
-  void showErrorSnackbar(BuildContext context, String message) {
-    final snackBar = SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'Error',
-        message: message,
-        contentType: ContentType.failure,
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 
   Future<void> fetchPlans(BuildContext context) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
@@ -87,7 +75,7 @@ class BnplNotifier extends Notifier<BnplState> {
       final list = await _getPlans();
       if (list == null || list.isEmpty) {
         if (context.mounted) {
-          showErrorSnackbar(context, 'Error loading plans');
+          SnackBarHelper.showErrorSnackbar(context, 'Error loading plans');
         }
       }
 
@@ -126,7 +114,7 @@ class BnplNotifier extends Notifier<BnplState> {
       if (data == null) {
         if (context.mounted) {
           if (context.mounted) {
-            showErrorSnackbar(context, 'Error loading Product');
+            SnackBarHelper.showErrorSnackbar(context, 'Error loading Product');
           }
         }
       }
@@ -184,7 +172,10 @@ class BnplNotifier extends Notifier<BnplState> {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
       if (context.mounted) {
         if (context.mounted) {
-          showErrorSnackbar(context, 'Error loading order status');
+          SnackBarHelper.showErrorSnackbar(
+            context,
+            'Error loading order status',
+          );
         }
       }
       return null;
