@@ -7,6 +7,7 @@ import 'package:wseela_assessment/features/bnpl/models/installment_schedule_item
 import 'package:wseela_assessment/features/bnpl/models/product.dart';
 import 'package:wseela_assessment/features/bnpl/providers/bnpl_providers.dart';
 import 'package:wseela_assessment/features/bnpl/views/order_confirmation.dart';
+import 'package:wseela_assessment/widgets/custom_button.dart';
 
 class SelectPlanScreen extends ConsumerWidget {
   const SelectPlanScreen({super.key});
@@ -69,32 +70,18 @@ class SelectPlanScreen extends ConsumerWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
-        child: ElevatedButton(
-          onPressed: () {
-            if (state.selectedPlan == null) return;
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => OrderConfirmationScreen()),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            minimumSize: const Size.fromHeight(52),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          child: const Text(
-            'Continue to Confirmation',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textOnPrimary,
-            ),
-          ),
-        ),
+      bottomNavigationBar: CustomButton(
+        title: 'Continue to Confirmation',
+        onPressed: selectedPlan == null
+            ? null
+            : () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const OrderConfirmationScreen(),
+                  ),
+                );
+              },
       ),
     );
   }

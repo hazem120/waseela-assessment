@@ -83,8 +83,7 @@ class BnplNotifier extends Notifier<BnplState> {
     }
   }
 
-  /// Same as [fetchPlans] but without BuildContext/loader overlay (unit-test friendly).
-  Future<void> loadPlans() async {
+  Future<void> loadPlans(BuildContext context) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
       final list = await _getPlans();
@@ -94,6 +93,11 @@ class BnplNotifier extends Notifier<BnplState> {
         errorMessage: list == null ? 'Failed to load plans' : null,
       );
     } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to load installment plans')),
+        );
+      }
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
     }
   }
@@ -111,6 +115,11 @@ class BnplNotifier extends Notifier<BnplState> {
       );
     } catch (e) {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to load product details')),
+        );
+      }
     } finally {
       if (context.mounted) context.loaderOverlay.hide();
     }
@@ -129,6 +138,11 @@ class BnplNotifier extends Notifier<BnplState> {
       );
       return status;
     } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to get the order status')),
+        );
+      }
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
 
       return null;

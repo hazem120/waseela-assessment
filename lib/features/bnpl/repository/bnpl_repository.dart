@@ -6,8 +6,8 @@ import '../../../core/utils/constants.dart';
 
 class BnplRepository {
   BnplRepository({Dio? dio, Logger? logger})
-      : _dio = dio ?? ApiClient.dio,
-        _logger = logger ?? Logger();
+    : _dio = dio ?? ApiClient.dio,
+      _logger = logger ?? Logger();
 
   final Dio _dio;
   final Logger _logger;
@@ -78,7 +78,9 @@ class BnplRepository {
     try {
       final response = await _dio.get(endpoint);
       final data = response.data;
-      final body = (data is Map && data.containsKey('data')) ? data['data'] : data;
+      final body = (data is Map && data.containsKey('data'))
+          ? data['data']
+          : data;
       if (body is Map) return Map<String, dynamic>.from(body);
       return null;
     } on DioException catch (e, st) {
@@ -95,11 +97,14 @@ class BnplRepository {
     try {
       final response = await _dio.get(endpoint);
       final data = response.data;
-      final body = (data is Map && data.containsKey('data')) ? data['data'] : data;
+      final body = (data is Map && data.containsKey('data'))
+          ? data['data']
+          : data;
       if (body is Map) return Map<String, dynamic>.from(body);
       return null;
     } on DioException catch (e, st) {
       _logger.e('getOrderStatus failed ($endpoint)', error: e, stackTrace: st);
+
       return null;
     } catch (e, st) {
       _logger.e('getOrderStatus failed ($endpoint)', error: e, stackTrace: st);

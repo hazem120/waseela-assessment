@@ -5,6 +5,7 @@ import 'package:wseela_assessment/features/bnpl/models/installment_plan.dart';
 import 'package:wseela_assessment/features/bnpl/models/product.dart';
 import 'package:wseela_assessment/features/bnpl/providers/bnpl_providers.dart';
 import 'package:wseela_assessment/features/bnpl/views/select_plan_screen.dart';
+import 'package:wseela_assessment/widgets/custom_button.dart';
 
 class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
@@ -79,31 +80,16 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => SelectPlanScreen()),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            minimumSize: const Size.fromHeight(52),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          child: const Text(
-            'Buy Now, Pay Later',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textOnPrimary,
-            ),
-          ),
-        ),
+      bottomNavigationBar: CustomButton(
+        title: 'Buy Now, Pay Later',
+        onPressed: state.selectedPlan != null
+            ? () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SelectPlanScreen()),
+                );
+              }
+            : null,
       ),
     );
   }
