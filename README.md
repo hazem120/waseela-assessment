@@ -6,8 +6,10 @@
 
 Mock APIs are used to simulate backend responses.
 Note: The free API service plan allows a **maximum of two endpoints**, so i've used made a small express application to implement the required endpoints.
+
 Start the mock server:
 repo: https://github.com/hazem120/waseela-mock-api 
+
 npm install 
 
 npm start dev
