@@ -1,7 +1,8 @@
 ## Project Setup
 
 **Flutter:** 3.41.4 (stable)
-**Testest platform : IOS ** 
+
+**Tested platform:**   IOS
 
 **Node.js:** v20.13.1
 
@@ -12,10 +13,11 @@ Start the mock server:
 
 repo: https://github.com/hazem120/waseela-mock-api 
 
-npm install 
+```
+$npm install 
 
-npm start dev
-
+$npm start dev
+```
 ---
 
 ## State Management
