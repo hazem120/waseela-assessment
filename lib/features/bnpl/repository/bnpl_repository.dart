@@ -30,10 +30,10 @@ class BnplRepository {
     try {
       final response = await _dio.get(AppConstants.productDetailsEndpoint(id));
       final data = response.data;
-      if (data is Map<String, dynamic>) return data;
-      if (data is Map) return Map<String, dynamic>.from(data);
-      return null;
+      return Map<String, dynamic>.from(data['data'] as Map);
     } on DioException {
+      return null;
+    } catch (e) {
       return null;
     }
   }
@@ -43,11 +43,13 @@ class BnplRepository {
     try {
       final response = await _dio.get(AppConstants.plansEndpoint);
       final data = response.data;
-      if (data is List<dynamic>) {
-        return data.map((e) => Map<String, dynamic>.from(e as Map)).toList();
-      }
-      return null;
+      return (data['data'] as List)
+          .map((e) => Map<String, dynamic>.from(e as Map))
+          .toList();
     } on DioException {
+      return null;
+    } catch (e) {
+      print('Error fetching plans: $e');
       return null;
     }
   }
