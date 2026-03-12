@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:wseela_assessment/features/bnpl/helpers/payments_sched.dart';
 
 import '../models/installment_plan.dart';
 import '../models/installment_schedule_item.dart';
@@ -26,7 +27,7 @@ class BnplState {
 
   List<InstallmentScheduleItem>? get installmentSchedule {
     if (selectedProduct == null || selectedPlan == null) return null;
-    return BnplRepository.buildInstallmentSchedule(
+    return PaymentsHelper.buildInstallmentSchedule(
       product: selectedProduct!,
       plan: selectedPlan!,
     );
