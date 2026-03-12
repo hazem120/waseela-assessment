@@ -1,6 +1,7 @@
 ## Project Setup
 
 **Flutter:** 3.41.4 (stable)
+**Testest platform : IOS :** 
 
 **Node.js:** v20.13.1
 
@@ -21,3 +22,4 @@ npm start dev
 **Riverpod** is used for state management.
 
 **Reason:** Riverpod was chosen because it provides **Simpler setup, better readability, and simpler dependency management** compared to BLoC, while still being scalable for this project.
+
