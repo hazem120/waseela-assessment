@@ -39,6 +39,8 @@ dependencies:
   flutter_riverpod: ^2.5.1
   loader_overlay: ^4.0.0
   logger: ^2.6.2
+  awesome_snackbar_content: ^0.1.8
+
 
 
 dev_dependencies:

@@ -8,6 +8,7 @@ import '../models/installment_schedule_item.dart';
 import '../models/product.dart';
 import '../repository/bnpl_repository.dart';
 import '../usecases/get_plans_use_case.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class BnplState {
   const BnplState({
@@ -65,12 +66,31 @@ class BnplNotifier extends Notifier<BnplState> {
 
   BnplRepository get _repo => ref.read(bnplRepositoryProvider);
   GetPlansUseCase get _getPlans => GetPlansUseCase(_repo);
+  void showErrorSnackbar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Error',
+        message: message,
+        contentType: ContentType.failure,
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
   Future<void> fetchPlans(BuildContext context) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
       context.loaderOverlay.show();
       final list = await _getPlans();
+      if (list == null || list.isEmpty) {
+        if (context.mounted) {
+          showErrorSnackbar(context, 'Error loading plans');
+        }
+      }
+
       state = state.copyWith(
         isLoading: false,
         plans: list,
@@ -83,7 +103,7 @@ class BnplNotifier extends Notifier<BnplState> {
     }
   }
 
-  /// Same as [fetchPlans] but without BuildContext/loader overlay (unit-test friendly).
+  // for unit testing without context
   Future<void> loadPlans() async {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
@@ -103,6 +123,13 @@ class BnplNotifier extends Notifier<BnplState> {
     try {
       context.loaderOverlay.show();
       final data = await _repo.getProductById(id);
+      if (data == null) {
+        if (context.mounted) {
+          if (context.mounted) {
+            showErrorSnackbar(context, 'Error loading Product');
+          }
+        }
+      }
       final product = data != null ? Product.fromJson(data) : null;
       state = state.copyWith(
         isLoading: false,
@@ -111,6 +138,16 @@ class BnplNotifier extends Notifier<BnplState> {
       );
     } catch (e) {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
+      if (context.mounted) {
+        final snackBar = SnackBar(
+          content: AwesomeSnackbarContent(
+            title: 'Error',
+            message: e.toString(),
+            contentType: ContentType.failure,
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
     } finally {
       if (context.mounted) context.loaderOverlay.hide();
     }
@@ -122,6 +159,21 @@ class BnplNotifier extends Notifier<BnplState> {
       context.loaderOverlay.show();
       final response = await _repo.getOrderStatus();
       final status = response?['status'] as String?;
+      if (status == null) {
+        if (context.mounted) {
+          final snackBar = SnackBar(
+            elevation: 0,
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: Colors.transparent,
+            content: AwesomeSnackbarContent(
+              title: 'Error',
+              message: 'Error loading plans',
+              contentType: ContentType.failure,
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      }
       state = state.copyWith(
         isLoading: false,
         orderStatus: status,
@@ -130,7 +182,11 @@ class BnplNotifier extends Notifier<BnplState> {
       return status;
     } catch (e) {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
-
+      if (context.mounted) {
+        if (context.mounted) {
+          showErrorSnackbar(context, 'Error loading order status');
+        }
+      }
       return null;
     } finally {
       if (context.mounted) context.loaderOverlay.hide();
