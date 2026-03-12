@@ -7,6 +7,7 @@ import '../models/installment_plan.dart';
 import '../models/installment_schedule_item.dart';
 import '../models/product.dart';
 import '../repository/bnpl_repository.dart';
+import '../usecases/get_plans_use_case.dart';
 
 class BnplState {
   const BnplState({
@@ -63,31 +64,13 @@ class BnplNotifier extends Notifier<BnplState> {
   }
 
   BnplRepository get _repo => ref.read(bnplRepositoryProvider);
-
-  Future<void> fetchProducts(BuildContext context) async {
-    state = state.copyWith(isLoading: true, errorMessage: null);
-    try {
-      context.loaderOverlay.show();
-      final data = await _repo.getProducts();
-      final list = data?.map((e) => Product.fromJson(e)).toList();
-      state = state.copyWith(
-        isLoading: false,
-        products: list,
-        errorMessage: list == null ? 'Failed to load products' : null,
-      );
-    } catch (e) {
-      state = state.copyWith(isLoading: false, errorMessage: e.toString());
-    } finally {
-      if (context.mounted) context.loaderOverlay.hide();
-    }
-  }
+  GetPlansUseCase get _getPlans => GetPlansUseCase(_repo);
 
   Future<void> fetchPlans(BuildContext context) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
     try {
       context.loaderOverlay.show();
-      final data = await _repo.getPlans();
-      final list = data?.map((e) => InstallmentPlan.fromJson(e)).toList();
+      final list = await _getPlans();
       state = state.copyWith(
         isLoading: false,
         plans: list,
@@ -97,6 +80,21 @@ class BnplNotifier extends Notifier<BnplState> {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
     } finally {
       if (context.mounted) context.loaderOverlay.hide();
+    }
+  }
+
+  /// Same as [fetchPlans] but without BuildContext/loader overlay (unit-test friendly).
+  Future<void> loadPlans() async {
+    state = state.copyWith(isLoading: true, errorMessage: null);
+    try {
+      final list = await _getPlans();
+      state = state.copyWith(
+        isLoading: false,
+        plans: list,
+        errorMessage: list == null ? 'Failed to load plans' : null,
+      );
+    } catch (e) {
+      state = state.copyWith(isLoading: false, errorMessage: e.toString());
     }
   }
 
@@ -132,6 +130,7 @@ class BnplNotifier extends Notifier<BnplState> {
       return status;
     } catch (e) {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
+
       return null;
     } finally {
       if (context.mounted) context.loaderOverlay.hide();

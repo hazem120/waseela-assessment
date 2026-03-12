@@ -38,10 +38,13 @@ dependencies:
   dio: ^5.7.0
   flutter_riverpod: ^2.5.1
   loader_overlay: ^4.0.0
+  logger: ^2.6.2
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mocktail: ^1.0.4
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
