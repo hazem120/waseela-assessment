@@ -6,6 +6,7 @@ import 'package:wseela_assessment/features/bnpl/models/installment_plan.dart';
 import 'package:wseela_assessment/features/bnpl/models/installment_schedule_item.dart';
 import 'package:wseela_assessment/features/bnpl/models/product.dart';
 import 'package:wseela_assessment/features/bnpl/providers/bnpl_providers.dart';
+import 'package:wseela_assessment/features/bnpl/views/order_confirmation.dart';
 
 class SelectPlanScreen extends ConsumerWidget {
   const SelectPlanScreen({super.key});
@@ -71,7 +72,13 @@ class SelectPlanScreen extends ConsumerWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            if (state.selectedPlan == null) return;
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => OrderConfirmationScreen()),
+            );
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
             minimumSize: const Size.fromHeight(52),
@@ -263,7 +270,7 @@ class _ScheduleColumn extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${e.installmentNumber}. ${_formatDate(e.dueDate)}',
+                    '${e.installmentNumber}. ${PaymentsHelper.formatDate(e.dueDate)}',
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -284,23 +291,5 @@ class _ScheduleColumn extends StatelessWidget {
           )
           .toList(),
     );
-  }
-
-  String _formatDate(DateTime date) {
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return '${months[date.month - 1]} ${date.day}';
   }
 }

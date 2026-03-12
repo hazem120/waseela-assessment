@@ -34,7 +34,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
-        leading: const BackButton(color: AppColors.textPrimary),
         title: const Text(
           'Checkout',
           style: TextStyle(

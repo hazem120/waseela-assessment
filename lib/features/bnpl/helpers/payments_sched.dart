@@ -3,10 +3,27 @@ import 'package:wseela_assessment/features/bnpl/models/installment_schedule_item
 import 'package:wseela_assessment/features/bnpl/models/product.dart';
 
 class PaymentsHelper {
+  static String formatDate(DateTime date) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return '${months[date.month - 1]} ${date.day}';
+  }
+
   static List<InstallmentScheduleItem> buildInstallmentSchedule({
     required Product product,
     required InstallmentPlan plan,
-    DateTime? startDate,
   }) {
     final price = product.price;
     final months = plan.months;
@@ -16,7 +33,7 @@ class PaymentsHelper {
     final interest = price * interestRate;
     final totalPayable = price + interest + adminFee;
     final monthlyAmount = totalPayable / months;
-    final now = startDate ?? DateTime.now();
+    final now = DateTime.now();
     final List<InstallmentScheduleItem> items = [];
 
     for (var i = 0; i < months; i++) {

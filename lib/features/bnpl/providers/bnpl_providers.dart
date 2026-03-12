@@ -16,6 +16,7 @@ class BnplState {
     this.plans,
     this.selectedProduct,
     this.selectedPlan,
+    this.orderStatus,
   });
 
   final bool isLoading;
@@ -24,6 +25,7 @@ class BnplState {
   final List<InstallmentPlan>? plans;
   final Product? selectedProduct;
   final InstallmentPlan? selectedPlan;
+  final String? orderStatus;
 
   List<InstallmentScheduleItem>? get installmentSchedule {
     if (selectedProduct == null || selectedPlan == null) return null;
@@ -40,6 +42,7 @@ class BnplState {
     List<InstallmentPlan>? plans,
     Product? selectedProduct,
     InstallmentPlan? selectedPlan,
+    String? orderStatus,
   }) {
     return BnplState(
       isLoading: isLoading ?? this.isLoading,
@@ -48,6 +51,7 @@ class BnplState {
       plans: plans ?? this.plans,
       selectedProduct: selectedProduct ?? this.selectedProduct,
       selectedPlan: selectedPlan ?? this.selectedPlan,
+      orderStatus: orderStatus ?? this.orderStatus,
     );
   }
 }
@@ -119,11 +123,13 @@ class BnplNotifier extends Notifier<BnplState> {
     try {
       context.loaderOverlay.show();
       final response = await _repo.getOrderStatus();
+      final status = response?['status'] as String?;
       state = state.copyWith(
         isLoading: false,
-        errorMessage: response == null ? 'Failed to load order status' : null,
+        orderStatus: status,
+        errorMessage: status == null ? 'Failed to load order status' : null,
       );
-      return response?['status'] as String?;
+      return status;
     } catch (e) {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
       return null;

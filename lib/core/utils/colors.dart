@@ -22,6 +22,11 @@ class AppColors {
   static const Color success = Color(0xFF22C55E);
   static const Color successLight = Color(0xFFDCFCE7);
 
+  static const Color approvedBackground = Color(0xFFE8F5E9);
+  static const Color approvedText = Color(0xFF2E7D32);
+  static const Color pendingBackground = Color(0xFFFFF3E0);
+  static const Color pendingText = Color(0xFFF57C00);
+
   static const Color border = Color(0xFFDDD6FE);
   static const Color shadow = Color(0x1A7C3AED);
 }

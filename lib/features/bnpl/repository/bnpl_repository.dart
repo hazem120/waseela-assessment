@@ -1,10 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:wseela_assessment/features/bnpl/models/installment_plan.dart';
-import 'package:wseela_assessment/features/bnpl/models/product.dart';
 
 import '../../../core/network/api_client.dart';
 import '../../../core/utils/constants.dart';
-import '../models/installment_schedule_item.dart';
 
 class BnplRepository {
   BnplRepository({Dio? dio}) : _dio = dio ?? ApiClient.dio;
@@ -49,7 +46,6 @@ class BnplRepository {
     } on DioException {
       return null;
     } catch (e) {
-      print('Error fetching plans: $e');
       return null;
     }
   }
@@ -71,6 +67,8 @@ class BnplRepository {
       final data = response.data;
       return Map<String, dynamic>.from(data);
     } on DioException {
+      return null;
+    } catch (e) {
       return null;
     }
   }
