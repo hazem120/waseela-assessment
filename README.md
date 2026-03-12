@@ -42,4 +42,4 @@ This project follows a lightweight **Clean Architecture** approach with clear se
 
 - **Tests (`test/`)**
   - Includes unit tests for **one use case** and **one notifier**, plus a widget test for **Checkout screen**.
-
+- CI pipeline
