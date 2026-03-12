@@ -6,6 +6,9 @@
 
 Mock APIs are used to simulate backend responses.
 Note: The free API service plan allows a **maximum of two endpoints**, so i've used made a small express application to implement the required endpoints.
+Start the mock server:
+npm install 
+node index.js
 
 ---
 
